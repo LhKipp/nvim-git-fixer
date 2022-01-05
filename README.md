@@ -59,7 +59,7 @@ if commit_only_current_hunk then
     fixer.start_single_hunk_commit()
 end
 fixer.commit(commit_type, hash)
-if t.hunk_only then
+if commit_only_current_hunk then
     fixer.finish_single_hunk_commit()
 end
 ```
