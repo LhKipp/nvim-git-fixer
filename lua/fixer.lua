@@ -11,7 +11,7 @@ function M.start_single_hunk_commit()
 end
 
 function M.finish_single_hunk_commit()
-    v.cmd("silent exec \"! [ -s ".. TMP_DIFF_F .. " ] && git apply --cached " .. TMP_DIFF_F .. "> /dev/null 2>&1; exit 0\"")
+    v.cmd("silent exec \"! [ -s ".. TMP_DIFF_F .. " ] && git apply --ignore-space-change --ignore-whitespace --cached " .. TMP_DIFF_F .. "> /dev/null 2>&1; exit 0\"")
     M._config.refresh_hunks_action()
 end
 
