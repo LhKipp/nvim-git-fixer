@@ -1,6 +1,6 @@
 # nvim-git-fixer :wrench:
 
-Create `fixup!`, `amend!`, `reword!` or `squash!` commits with ease. (See the `--autosquash` option of `git rebase` for further information)
+Create `fixup!`, `amend!`, `reword!` or `squash!` commits with ease. (See the `--autosquash` option of `git rebase` for further information about these commit types)
 
 ## Installation
 
@@ -8,7 +8,7 @@ Create `fixup!`, `amend!`, `reword!` or `squash!` commits with ease. (See the `-
 Plug 'LhKipp/nvim-git-fixer'
 Plug 'tpope/vim-fugitive' " Required
 
-" Needed for stage_hunk, undo_stage_hunk and refresh actions. But can be swapped out
+" Needed for stage_hunk, undo_stage_hunk and refresh actions. But can be swapped out. See configuration below.
 Plug 'lewis6991/gitsigns.nvim'
 
 " Needed if you want to use telescope to pick the commits to fix
@@ -37,9 +37,12 @@ require('fixer/picker/telescope').commit{type="amend"}
 require('fixer').commit_hunk()
 ```
 
+Note: When only commiting the hunk under the cursor (`hunk_only=true`), `nvim-git-fixer` will try to stash the index only. Git does not offer such a functionality. Therefore a technique as explained here https://stackoverflow.com/a/60925924 is used. This method is not perfect (but it works in 95% of all situations on my machine :upside_down_face:)
+
 ## Configuration
-Currently the configuration only allows to pick a different plugin to do stage hunk actions
+Currently the configuration only allows to pick a different plugin to do stage hunk actions.
 ```lua
+-- defaults shown --
 require('fixer').setup{
     stage_hunk_action = function () require("gitsigns").stage_hunk() end,
     undo_stage_hunk_action = function () require("gitsigns").undo_stage_hunk() end,
