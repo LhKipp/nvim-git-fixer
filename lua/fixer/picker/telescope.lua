@@ -6,6 +6,7 @@ function M.commit(t)
     setmetatable(t, {__index={type="fixup", hunk_only=false}})
 
     require('telescope.builtin').git_commits{
+        git_command = {"git", "log", "--pretty=oneline", "--abbrev-commit", "origin..HEAD"}, -- Only show commits since master/origin
         prompt_title = 'Select commit',
         attach_mappings = function(_, map)
           map('i', '<cr>', function(bufnr)
