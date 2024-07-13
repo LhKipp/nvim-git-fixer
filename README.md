@@ -18,11 +18,6 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'ibhagwan/fzf-lua'
 ```
 
-Don't forget to call setup :smirk:
-```lua
-require('fixer').setup{}
-```
-
 ## Usage
 
 ```lua

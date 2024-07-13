@@ -70,9 +70,10 @@ local function default_opts()
     }
 end
 
+M._config = default_opts()
+
 function M.setup(opts)
-    M._config = default_opts()
-    v.tbl_extend("force", M._config, opts)
+    M._config = v.tbl_extend("force", M._config, opts)
 end
 
 return M
