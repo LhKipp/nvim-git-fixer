@@ -9,6 +9,7 @@ Create `fixup!`, `amend!`, `reword!` or `squash!` commits with ease. (See the `-
 ```vim
 Plug 'LhKipp/nvim-git-fixer'
 Plug 'tpope/vim-fugitive' " Required
+Plug 'nvim-lua/plenary.nvim' " Required
 
 " Needed for stage_hunk, undo_stage_hunk and refresh actions. But can be swapped out. See configuration below.
 Plug 'lewis6991/gitsigns.nvim'
@@ -29,26 +30,30 @@ require('fixer/picker/telescope').commit{hunk_only=true, type="fixup"}
 -- Use fzf-lua to select the commit.
 require('fixer/picker/fzf_lua').commit{type="amend"}
 
--- The following options can be passed to a picker
--- {
---   hunk_only = true | false
---   type      = "fixup" | "amend" | "reword" | "squash"
--- }
-
--- For convenience:  Create a 'normal' commit with the contents of the hunk under the cursor
+-- For convenience: Create a 'normal' commit with the contents of the hunk under the cursor
 require('fixer').commit_hunk()
 ```
 
 Note: When only commiting the hunk under the cursor (`hunk_only=true`), `nvim-git-fixer` will try to stash the index only. Git does not offer such a functionality. Therefore a technique as explained here https://stackoverflow.com/a/60925924 is used. This method is not perfect (but it works in 95% of all situations on my machine :upside_down_face:)
 
 ## Configuration
-Currently the configuration only allows to pick a different plugin to do stage hunk actions.
+
 ```lua
 -- defaults shown --
-require('fixer').setup{
-    stage_hunk_action = function () require("gitsigns").stage_hunk() end,
-    undo_stage_hunk_action = function () require("gitsigns").undo_stage_hunk() end,
-    refresh_hunks_action = function () require("gitsigns").refresh() end,
+{
+    stage_hunk_action = function() require("gitsigns").stage_hunk() end,
+    undo_stage_hunk_action = function() require("gitsigns").undo_stage_hunk() end,
+    refresh_hunks_action = function() require("gitsigns").refresh() end,
+    -- Default arguments for a commit picker
+    -- Defaults are overwritten by the arguments passed to `commit`
+    default_picker_args = {
+        -- The commit type
+        type = "fixup",    -- fixup|amend|reword|squash
+        -- Only commit the current hunk
+        hunk_only = false, -- true|false
+        -- Only show commits since origin/main or origin/master
+        only_commits_since_main = true
+    }
 }
 ```
 

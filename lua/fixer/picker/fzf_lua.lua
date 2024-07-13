@@ -11,17 +11,23 @@ local match_commit_hash = function(line, opts)
 end
 
 function M.commit(t)
-    setmetatable(t, { __index = { type = "fixup", hunk_only = false } })
+    local args = vim.tbl_deep_extend('force', fixer._config.default_picker_args, t)
 
-    require('fzf-lua').git_commits {
+    local git_log_cmd = "git log --pretty=oneline --abbrev-commit"
+    if args.only_commits_since_main then
+        git_log_cmd = git_log_cmd .. ' ' .. fixer.master_or_main() .. '..HEAD'
+    end
+
+    require 'fzf-lua'.git_commits {
+        cmd = git_log_cmd,
         actions = {
             ["default"] = function(selected, opts)
                 local entry = match_commit_hash(selected[1], opts)
-                if t.hunk_only then
+                if args.hunk_only then
                     fixer.start_single_hunk_commit()
                 end
-                fixer.commit(t.type, entry)
-                if t.hunk_only then
+                fixer.commit(args.type, entry)
+                if args.hunk_only then
                     fixer.finish_single_hunk_commit()
                 end
                 return true
