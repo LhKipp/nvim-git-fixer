@@ -13,8 +13,9 @@ Plug 'tpope/vim-fugitive' " Required
 " Needed for stage_hunk, undo_stage_hunk and refresh actions. But can be swapped out. See configuration below.
 Plug 'lewis6991/gitsigns.nvim'
 
-" Needed if you want to use telescope to pick the commits to fix
+" Either use telescope or fzf-lua to pick commits ... or code your own (see below)
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'ibhagwan/fzf-lua'
 ```
 
 Don't forget to call setup :smirk:
@@ -25,15 +26,19 @@ require('fixer').setup{}
 ## Usage
 
 ```lua
--- Create a `fixup!` commit only with the contents of the hunk under the cursor
--- Use a telescope based picker to select the commit to fix
+-- Create a `fixup!` commit only with the contents of the hunk under the cursor.
+-- Use telescope to select the commit.
 require('fixer/picker/telescope').commit{hunk_only=true, type="fixup"} 
 
--- Create an `amend!` commit with the contents of the index
--- Use a telescope based picker to select the commit to fix
-require('fixer/picker/telescope').commit{type="amend"}
+-- Create an `amend!` commit with the contents of the index.
+-- Use fzf-lua to select the commit.
+require('fixer/picker/fzf_lua').commit{type="amend"}
 
--- `type`'s supported are: 'fixup', 'amend', 'reword' and 'squash'
+-- The following options can be passed to a picker
+-- {
+--   hunk_only = true | false
+--   type      = "fixup" | "amend" | "reword" | "squash"
+-- }
 
 -- For convenience:  Create a 'normal' commit with the contents of the hunk under the cursor
 require('fixer').commit_hunk()
