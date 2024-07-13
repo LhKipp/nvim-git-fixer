@@ -2,7 +2,7 @@
 
 Create `fixup!`, `amend!`, `reword!` or `squash!` commits with ease. (See the `--autosquash` option of `git rebase` for further information about these commit types)
 
-![](assets/example.gif)
+[![asciicast](https://asciinema.org/a/I9PkD1FVKxZSHYtQAxQ3KnWzi.svg)](https://asciinema.org/a/I9PkD1FVKxZSHYtQAxQ3KnWzi)
 
 ## Installation
 
