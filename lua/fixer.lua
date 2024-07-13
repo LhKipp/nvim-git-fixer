@@ -6,18 +6,22 @@ local TMP_DIFF_F = "/tmp/G_STAGED_HUNKS.diff"
 
 -- Library functions --
 function M.start_single_hunk_commit()
-    v.cmd("silent exec \"!git diff --cached > ".. TMP_DIFF_F .. " ; git reset > /dev/null 2>&1\"")
+    v.cmd("silent exec \"!git diff --cached > " .. TMP_DIFF_F .. " ; git reset > /dev/null 2>&1\"")
     M._config.stage_hunk_action()
 end
 
 function M.finish_single_hunk_commit()
-    v.cmd("silent exec \"! [ -s ".. TMP_DIFF_F .. " ] && git apply --3way --ignore-space-change --ignore-whitespace --cached " .. TMP_DIFF_F .. "> /dev/null 2>&1; exit 0\"")
+    v.cmd("silent exec \"! [ -s " ..
+        TMP_DIFF_F ..
+        " ] && git apply --3way --ignore-space-change --ignore-whitespace --cached " ..
+        TMP_DIFF_F .. "> /dev/null 2>&1; exit 0\"")
     M._config.refresh_hunks_action()
 end
 
 function M.abort_single_hunk_commit()
     M._config.undo_stage_hunk_action()
-    v.cmd("silent exec \"! [ -s ".. TMP_DIFF_F .. " ] && git apply --cached " .. TMP_DIFF_F .. "> /dev/null 2>&1; exit 0\"")
+    v.cmd("silent exec \"! [ -s " ..
+        TMP_DIFF_F .. " ] && git apply --cached " .. TMP_DIFF_F .. "> /dev/null 2>&1; exit 0\"")
     M._config.refresh_hunks_action()
 end
 
@@ -26,7 +30,7 @@ function M.commit(commit_type, commit_hash)
     local flag = M.commit_option_to_flag(commit_type)
 
     if commit_type == "fixup" then
-        v.cmd("silent exec \"!git commit ".. flag .. commit_hash .. "\"")
+        v.cmd("silent exec \"!git commit " .. flag .. commit_hash .. "\"")
     else
         v.cmd("G commit " .. flag .. commit_hash)
     end
@@ -52,7 +56,7 @@ function M.commit_hunk()
         return
     end
     M.start_single_hunk_commit()
-    v.cmd("silent exec \"!git commit -m '" .. msg  .. "'\"")
+    v.cmd("silent exec \"!git commit -m '" .. msg .. "'\"")
     M.finish_single_hunk_commit()
 end
 
@@ -60,9 +64,9 @@ end
 
 local function default_opts()
     return {
-        stage_hunk_action = function () require("gitsigns").stage_hunk() end,
-        undo_stage_hunk_action = function () require("gitsigns").undo_stage_hunk() end,
-        refresh_hunks_action = function () require("gitsigns").refresh() end,
+        stage_hunk_action = function() require("gitsigns").stage_hunk() end,
+        undo_stage_hunk_action = function() require("gitsigns").undo_stage_hunk() end,
+        refresh_hunks_action = function() require("gitsigns").refresh() end,
     }
 end
 
